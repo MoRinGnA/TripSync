@@ -1,16 +1,13 @@
 # TripSync AI 여행플래너
 
 다중 사용자가 AI를 통해 빠르고 편리하게 여행을 계획할 수 있는 웹 플래너
+---
+**로드맵**
 
-Currently, two official plugins are available:
+1주차 (완료)
+  * 개발환경 세팅 (VSC, React, Vite, Tailwind css)
+  * GitHub repository 연동 및 초기 코드 업로드
+  * 여행 일정 UI 임시 구현
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+2주차 
+  * 
