@@ -132,7 +132,7 @@ function App() {
             </button>
           ))}
           <button onClick={handleAddDay} className="btn-add-day">
-            + 일차 추가
+            날짜 추가
           </button>
         </div>
 
@@ -244,6 +244,12 @@ function App() {
                     </div>
 
                     <div className="action-group">
+                      <button
+                        onClick={() => handleEditStart(item)}
+                        className="btn-text-blue"
+                      >
+                        수정
+                      </button>
                       <button
                         onClick={() => handleDelete(item.id)}
                         className="btn-text-red"
