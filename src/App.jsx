@@ -226,7 +226,10 @@ function App() {
                   </div>
                 ) : (
                   <>
-                    <div className="flex-1">
+                    <div
+                      className="timeline-content-clickable"
+                      onClick={() => handleEditStart(item)}
+                    >
                       <div className="flex flex-col sm:flex-row sm:items-baseline mb-1">
                         <span className="text-sm font-semibold text-[#86868b] mr-3 w-max">
                           {item.time}
@@ -241,12 +244,6 @@ function App() {
                     </div>
 
                     <div className="action-group">
-                      <button
-                        onClick={() => handleEditStart(item)}
-                        className="btn-text-blue"
-                      >
-                        수정
-                      </button>
                       <button
                         onClick={() => handleDelete(item.id)}
                         className="btn-text-red"

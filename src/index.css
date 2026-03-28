@@ -46,4 +46,7 @@
   .action-group {
     @apply flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200;
   }
+  .timeline-content-clickable {
+    @apply flex-1 cursor-pointer hover:bg-gray-100 p-2 -ml-2 rounded-lg transition-colors;
+  }
 }
