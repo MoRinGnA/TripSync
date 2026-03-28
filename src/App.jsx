@@ -48,6 +48,13 @@ function App() {
     location: "",
   });
 
+  const [editingId, setEditingId] = useState(null);
+  const [editForm, setEditForm] = useState({
+    time: "",
+    title: "",
+    location: "",
+  });
+
   const handleAddDay = () => {
     const nextDay = days.length + 1;
     setDays([...days, nextDay]);
@@ -76,6 +83,33 @@ function App() {
   const handleDelete = (id) => {
     const filteredSchedule = schedule.filter((item) => item.id !== id);
     setSchedule(filteredSchedule);
+  };
+
+  const handleEditStart = (item) => {
+    setEditingId(item.id);
+    setEditForm({
+      time: item.time,
+      title: item.title,
+      location: item.location,
+    });
+  };
+
+  const handleEditSave = (id) => {
+    const updatedSchedule = schedule.map((item) => {
+      if (item.id === id) {
+        return { ...item, ...editForm };
+      }
+      return item;
+    });
+
+    updatedSchedule.sort((a, b) => (a.time > b.time ? 1 : -1));
+
+    setSchedule(updatedSchedule);
+    setEditingId(null);
+  };
+
+  const handleEditCancel = () => {
+    setEditingId(null);
   };
 
   const currentDaySchedule = schedule.filter((item) => item.day === activeDay);
@@ -147,26 +181,81 @@ function App() {
               <div key={item.id} className="timeline-item group">
                 <div className="timeline-dot"></div>
 
-                <div className="flex-1">
-                  <div className="flex flex-col sm:flex-row sm:items-baseline mb-1">
-                    <span className="text-sm font-semibold text-[#86868b] mr-3 w-max">
-                      {item.time}
-                    </span>
-                    <h3 className="text-lg font-semibold text-[#1d1d1f] mt-1 sm:mt-0 tracking-tight">
-                      {item.title}
-                    </h3>
+                {editingId === item.id ? (
+                  <div className="edit-container">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 mb-3">
+                      <input
+                        type="time"
+                        value={editForm.time}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, time: e.target.value })
+                        }
+                        className="input-field"
+                        required
+                      />
+                      <input
+                        type="text"
+                        value={editForm.title}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, title: e.target.value })
+                        }
+                        className="input-field"
+                        required
+                      />
+                      <input
+                        type="text"
+                        value={editForm.location}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, location: e.target.value })
+                        }
+                        className="input-field"
+                        required
+                      />
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <button onClick={handleEditCancel} className="btn-cancel">
+                        취소
+                      </button>
+                      <button
+                        onClick={() => handleEditSave(item.id)}
+                        className="btn-save"
+                      >
+                        저장
+                      </button>
+                    </div>
                   </div>
-                  <p className="text-[#86868b] text-sm font-medium mt-1">
-                    {item.location}
-                  </p>
-                </div>
+                ) : (
+                  <>
+                    <div className="flex-1">
+                      <div className="flex flex-col sm:flex-row sm:items-baseline mb-1">
+                        <span className="text-sm font-semibold text-[#86868b] mr-3 w-max">
+                          {item.time}
+                        </span>
+                        <h3 className="text-lg font-semibold text-[#1d1d1f] mt-1 sm:mt-0 tracking-tight">
+                          {item.title}
+                        </h3>
+                      </div>
+                      <p className="text-[#86868b] text-sm font-medium mt-1">
+                        {item.location}
+                      </p>
+                    </div>
 
-                <button
-                  onClick={() => handleDelete(item.id)}
-                  className="text-[#0071e3] hover:text-[#0077ed] text-sm font-medium px-3 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                >
-                  삭제
-                </button>
+                    <div className="action-group">
+                      <button
+                        onClick={() => handleEditStart(item)}
+                        className="btn-text-blue"
+                      >
+                        수정
+                      </button>
+                      <button
+                        onClick={() => handleDelete(item.id)}
+                        className="btn-text-red"
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             ))
           )}
