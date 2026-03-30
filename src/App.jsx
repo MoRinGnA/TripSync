@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
+import {
+  DndContext,
+  useDraggable,
+  useDroppable,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 
 function DraggableTab({ day, activeDay, onClick }) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -9,7 +17,7 @@ function DraggableTab({ day, activeDay, onClick }) {
 
   const style = transform
     ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        transform: CSS.Translate.toString(transform),
         zIndex: 50,
       }
     : undefined;
@@ -36,15 +44,22 @@ function TrashCan() {
   return (
     <div
       ref={setNodeRef}
-      className={`fixed bottom-10 right-10 w-24 h-24 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 z-40 ${
-        isOver
-          ? "bg-red-500 text-white scale-125"
-          : "bg-red-100 text-red-500 scale-100"
-      }`}
+      className={`trash-can-base ${isOver ? "trash-can-active" : "trash-can-inactive"}`}
     >
-      <span className="font-bold text-sm text-center">
-        {isOver ? "놓아서 삭제" : "삭제 휴지통"}
-      </span>
+      <svg
+        className="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+        />
+      </svg>
     </div>
   );
 }
@@ -104,6 +119,14 @@ function App() {
 
   const [activeDay, setActiveDay] = useState(1);
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+  );
+
   useEffect(() => {
     localStorage.setItem("project-p-schedule", JSON.stringify(schedule));
   }, [schedule]);
@@ -152,7 +175,12 @@ function App() {
 
       setDays(newDays);
       setSchedule(newSchedule);
-      setActiveDay(1);
+
+      if (activeDay === dayToDelete) {
+        setActiveDay(1);
+      } else if (activeDay > dayToDelete) {
+        setActiveDay(activeDay - 1);
+      }
     }
   };
 
@@ -210,14 +238,12 @@ function App() {
   const currentDaySchedule = schedule.filter((item) => item.day === activeDay);
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
-      <div className="min-h-screen bg-[#f5f5f7] py-16 px-4 sm:px-6 lg:px-8 font-sans transition-colors duration-300 relative overflow-hidden">
+    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+      <div className="app-layout">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-4xl font-bold text-[#1d1d1f] text-center mb-12 tracking-tight">
-            Project P
-          </h1>
+          <h1 className="header-title">Project P</h1>
 
-          <div className="flex flex-wrap justify-center items-center gap-2 mb-12 relative z-10">
+          <div className="tab-container">
             {days.map((day) => (
               <DraggableTab
                 key={day}
@@ -231,11 +257,8 @@ function App() {
             </button>
           </div>
 
-          <form
-            onSubmit={handleAddSchedule}
-            className="form-container relative z-10"
-          >
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-6">
+          <form onSubmit={handleAddSchedule} className="form-container">
+            <div className="input-group">
               <input
                 type="time"
                 value={newItem.time}
@@ -271,9 +294,9 @@ function App() {
             </button>
           </form>
 
-          <div className="relative border-l border-gray-300 ml-4 md:ml-6 z-10">
+          <div className="timeline-wrapper">
             {currentDaySchedule.length === 0 ? (
-              <div className="pl-10 py-4 text-[#86868b] text-sm font-medium">
+              <div className="empty-schedule">
                 등록된 일정이 없습니다. 새 일정을 추가해 보세요.
               </div>
             ) : (
