@@ -1,0 +1,29 @@
+@reference "tailwindcss";
+
+.map-view-container {
+  @apply h-full flex flex-col p-10 max-w-[1400px] mx-auto w-full;
+}
+
+.map-search-panel {
+  @apply w-[380px] flex flex-col gap-4;
+}
+
+.map-search-box {
+  @apply bg-white p-5 rounded-[20px] shadow-[0_2px_10px_rgba(0,0,0,0.04)] border border-[#f5f5f7];
+}
+
+.map-search-input {
+  @apply w-full pl-10 pr-4 py-3 bg-[#f5f5f7] border-none rounded-[12px] text-[#1d1d1f] placeholder-[#86868b] focus:outline-none focus:ring-2 focus:ring-[#007aff] transition-all text-[15px];
+}
+
+.map-search-btn {
+  @apply w-full mt-3 py-3 bg-[#1d1d1f] text-white text-[15px] font-semibold rounded-[12px] hover:bg-[#333336] transition-colors shadow-sm;
+}
+
+.map-result-box {
+  @apply bg-white flex-1 p-5 rounded-[20px] shadow-[0_2px_10px_rgba(0,0,0,0.04)] border border-[#f5f5f7] overflow-y-auto flex items-center justify-center;
+}
+
+.map-render-area {
+  @apply flex-1 bg-[#f5f5f7] rounded-[24px] shadow-[inset_0_2px_10px_rgba(0,0,0,0.02)] border border-[#e5e5ea] overflow-hidden relative flex items-center justify-center;
+}

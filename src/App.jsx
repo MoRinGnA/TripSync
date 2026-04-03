@@ -5,9 +5,9 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import DayTabs from "./components/DayTabs";
-import ScheduleForm from "./components/ScheduleForm";
-import Timeline from "./components/Timeline";
+import Navigation from "./components/Navigation";
+import TimelineView from "./components/TimelineView";
+import MapSearchView from "./components/MapSearchView";
 import TrashCan from "./components/TrashCan";
 
 function App() {
@@ -16,43 +16,7 @@ function App() {
     if (saved) {
       return JSON.parse(saved);
     }
-    return [
-      {
-        id: 1,
-        day: 1,
-        time: "09:00",
-        title: "공항 도착 및 수하물 위탁",
-        location: "인천국제공항 제1터미널",
-      },
-      {
-        id: 2,
-        day: 1,
-        time: "11:30",
-        title: "비행기 탑승 및 출발",
-        location: "게이트 24번",
-      },
-      {
-        id: 3,
-        day: 2,
-        time: "10:00",
-        title: "유니버셜 스튜디오 재팬",
-        location: "오사카",
-      },
-      {
-        id: 4,
-        day: 2,
-        time: "19:00",
-        title: "도톤보리 맛집 투어",
-        location: "오사카 난바",
-      },
-      {
-        id: 5,
-        day: 3,
-        time: "11:00",
-        title: "숙소 체크아웃 및 공항 이동",
-        location: "오사카 시내 호텔",
-      },
-    ];
+    return [];
   });
 
   const [days, setDays] = useState(() => {
@@ -64,6 +28,7 @@ function App() {
   });
 
   const [activeDay, setActiveDay] = useState(1);
+  const [activeView, setActiveView] = useState("timeline");
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -185,36 +150,35 @@ function App() {
 
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-      <div className="app-layout">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="header-title">Project P</h1>
+      <div className="flex min-h-screen w-full bg-[#fbfbfd]">
+        <Navigation activeView={activeView} setActiveView={setActiveView} />
 
-          <DayTabs
-            days={days}
-            activeDay={activeDay}
-            setActiveDay={setActiveDay}
-            onAddDay={handleAddDay}
-          />
-
-          <ScheduleForm
-            newItem={newItem}
-            setNewItem={setNewItem}
-            onAddSchedule={handleAddSchedule}
-            activeDay={activeDay}
-          />
-
-          <Timeline
-            schedule={currentDaySchedule}
-            editingId={editingId}
-            editForm={editForm}
-            setEditForm={setEditForm}
-            onEditStart={handleEditStart}
-            onEditSave={handleEditSave}
-            onEditCancel={handleEditCancel}
-            onDelete={handleDelete}
-          />
+        <div className="flex-1 ml-20 transition-all duration-300">
+          {activeView === "timeline" ? (
+            <div className="relative w-full h-full">
+              <TimelineView
+                days={days}
+                activeDay={activeDay}
+                setActiveDay={setActiveDay}
+                handleAddDay={handleAddDay}
+                newItem={newItem}
+                setNewItem={setNewItem}
+                handleAddSchedule={handleAddSchedule}
+                currentDaySchedule={currentDaySchedule}
+                editingId={editingId}
+                editForm={editForm}
+                setEditForm={setEditForm}
+                handleEditStart={handleEditStart}
+                handleEditSave={handleEditSave}
+                handleEditCancel={handleEditCancel}
+                handleDelete={handleDelete}
+              />
+              <TrashCan />
+            </div>
+          ) : (
+            <MapSearchView />
+          )}
         </div>
-        <TrashCan />
       </div>
     </DndContext>
   );
