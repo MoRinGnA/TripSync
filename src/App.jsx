@@ -24,6 +24,7 @@ function App() {
 
   const [activeDay, setActiveDay] = useState(1);
   const [activeView, setActiveView] = useState("ai");
+  const [isSplitView, setIsSplitView] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -147,7 +148,10 @@ function App() {
     ];
     newSchedule.sort((a, b) => (a.time > b.time ? 1 : -1));
     setSchedule(newSchedule);
-    setActiveView("timeline");
+
+    if (!isSplitView) {
+      setActiveView("timeline");
+    }
   };
 
   const handleGenerateFromAI = (generatedSchedule, totalDays) => {
@@ -170,45 +174,78 @@ function App() {
 
     setSchedule(newScheduleWithIds);
     setActiveDay(1);
-    setActiveView("timeline");
+
+    if (!isSplitView) {
+      setActiveView("timeline");
+    }
   };
 
   const currentDaySchedule = schedule.filter((item) => item.day === activeDay);
 
+  const renderTimeline = () => (
+    <div className="relative w-full h-full overflow-hidden">
+      <TimelineView
+        days={days}
+        activeDay={activeDay}
+        setActiveDay={setActiveDay}
+        handleAddDay={handleAddDay}
+        newItem={newItem}
+        setNewItem={setNewItem}
+        handleAddSchedule={handleAddSchedule}
+        currentDaySchedule={currentDaySchedule}
+        editingId={editingId}
+        editForm={editForm}
+        setEditForm={setEditForm}
+        handleEditStart={handleEditStart}
+        handleEditSave={handleEditSave}
+        handleEditCancel={handleEditCancel}
+        handleDelete={handleDelete}
+      />
+      <TrashCan />
+    </div>
+  );
+
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-      <div className="flex min-h-screen w-full bg-[#fbfbfd]">
-        <Navigation activeView={activeView} setActiveView={setActiveView} />
+      <div className="flex h-screen w-full bg-[#fbfbfd] overflow-hidden">
+        <Navigation
+          activeView={activeView}
+          setActiveView={setActiveView}
+          isSplitView={isSplitView}
+          setIsSplitView={setIsSplitView}
+        />
 
-        <div className="flex-1 ml-20 transition-all duration-300">
-          {activeView === "timeline" ? (
-            <div className="relative w-full h-full">
-              <TimelineView
-                days={days}
-                activeDay={activeDay}
-                setActiveDay={setActiveDay}
-                handleAddDay={handleAddDay}
-                newItem={newItem}
-                setNewItem={setNewItem}
-                handleAddSchedule={handleAddSchedule}
-                currentDaySchedule={currentDaySchedule}
-                editingId={editingId}
-                editForm={editForm}
-                setEditForm={setEditForm}
-                handleEditStart={handleEditStart}
-                handleEditSave={handleEditSave}
-                handleEditCancel={handleEditCancel}
-                handleDelete={handleDelete}
-              />
-              <TrashCan />
+        <div className="flex-1 ml-20 transition-all duration-300 h-full">
+          {isSplitView ? (
+            <div className="flex w-full h-full divide-x divide-[#e5e5ea]">
+              <div className="w-1/2 h-full bg-[#fbfbfd]">
+                {renderTimeline()}
+              </div>
+
+              <div className="w-1/2 h-full bg-white overflow-auto">
+                {activeView === "ai" || activeView === "timeline" ? (
+                  <AiPlannerView onGenerateSchedule={handleGenerateFromAI} />
+                ) : (
+                  <MapSearchView
+                    activeDay={activeDay}
+                    onAddPlace={handleAddFromMap}
+                  />
+                )}
+              </div>
             </div>
-          ) : activeView === "ai" ? (
-            <AiPlannerView onGenerateSchedule={handleGenerateFromAI} />
           ) : (
-            <MapSearchView
-              activeDay={activeDay}
-              onAddPlace={handleAddFromMap}
-            />
+            <div className="w-full h-full overflow-auto">
+              {activeView === "timeline" ? (
+                renderTimeline()
+              ) : activeView === "ai" ? (
+                <AiPlannerView onGenerateSchedule={handleGenerateFromAI} />
+              ) : (
+                <MapSearchView
+                  activeDay={activeDay}
+                  onAddPlace={handleAddFromMap}
+                />
+              )}
+            </div>
           )}
         </div>
       </div>
