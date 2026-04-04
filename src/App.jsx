@@ -8,6 +8,7 @@ import {
 import Navigation from "./components/Navigation";
 import TimelineView from "./components/TimelineView";
 import MapSearchView from "./components/MapSearchView";
+import AiPlannerView from "./components/AiPlannerView";
 import TrashCan from "./components/TrashCan";
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
   });
 
   const [activeDay, setActiveDay] = useState(1);
-  const [activeView, setActiveView] = useState("timeline");
+  const [activeView, setActiveView] = useState("ai");
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -149,6 +150,29 @@ function App() {
     setActiveView("timeline");
   };
 
+  const handleGenerateFromAI = (generatedSchedule, totalDays) => {
+    const newDaysArray = Array.from({ length: totalDays }, (_, i) => i + 1);
+    setDays(newDaysArray);
+
+    let currentMaxId =
+      schedule.length > 0 ? Math.max(...schedule.map((item) => item.id)) : 0;
+
+    const newScheduleWithIds = generatedSchedule.map((item) => {
+      currentMaxId += 1;
+      return {
+        id: currentMaxId,
+        day: item.day,
+        time: item.time,
+        title: item.title,
+        location: item.location,
+      };
+    });
+
+    setSchedule(newScheduleWithIds);
+    setActiveDay(1);
+    setActiveView("timeline");
+  };
+
   const currentDaySchedule = schedule.filter((item) => item.day === activeDay);
 
   return (
@@ -178,6 +202,8 @@ function App() {
               />
               <TrashCan />
             </div>
+          ) : activeView === "ai" ? (
+            <AiPlannerView onGenerateSchedule={handleGenerateFromAI} />
           ) : (
             <MapSearchView
               activeDay={activeDay}
