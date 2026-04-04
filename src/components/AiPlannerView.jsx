@@ -16,7 +16,7 @@ export default function AiPlannerView({ onGenerateSchedule }) {
 
     try {
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBD-adW9WUsEoM0QEDbfOF55_tf9GkXk2U`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBfeGZu6vwq8iiq5XhCtwVEq_YPN4vjD4k`,
         {
           method: "POST",
           headers: {
