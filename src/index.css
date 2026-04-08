@@ -78,4 +78,13 @@
   .trash-can-inactive {
     @apply bg-white/70 border-gray-200 text-gray-500 scale-100;
   }
+  @layer utilities {
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  }
 }

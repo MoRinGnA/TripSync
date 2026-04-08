@@ -3,9 +3,14 @@ import "../styles/MapSearchView.css";
 
 export default function AiPlannerView({ onGenerateSchedule }) {
   const [destination, setDestination] = useState("");
-  const [days, setDays] = useState(1);
+  const [days, setDays] = useState("1");
   const [theme, setTheme] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleDaysChange = (e) => {
+    const value = e.target.value.replace(/[^0-9]/g, "").replace(/^0+/, "");
+    setDays(value);
+  };
 
   const handleGenerate = async () => {
     if (!destination || !theme) return;
@@ -74,7 +79,7 @@ export default function AiPlannerView({ onGenerateSchedule }) {
       );
       const recommendedProvider = isDomestic ? "kakao" : "google";
 
-      onGenerateSchedule(parsedSchedule, days, recommendedProvider);
+      onGenerateSchedule(parsedSchedule, Number(days), recommendedProvider);
     } catch (error) {
       alert(`오류가 발생했습니다.\n이유: ${error.message}`);
     } finally {
@@ -83,8 +88,8 @@ export default function AiPlannerView({ onGenerateSchedule }) {
   };
 
   return (
-    <div className="map-view-container">
-      <div className="mb-8">
+    <div className="flex flex-col items-center justify-center w-full h-full p-8">
+      <div className="w-full max-w-2xl text-left mb-8">
         <h2 className="text-[32px] font-bold text-[#1d1d1f] tracking-tight">
           AI 일정 자동 생성
         </h2>
@@ -113,11 +118,9 @@ export default function AiPlannerView({ onGenerateSchedule }) {
               여행 기간 (일)
             </label>
             <input
-              type="number"
-              min="1"
-              max="10"
+              type="text"
               value={days}
-              onChange={(e) => setDays(Number(e.target.value))}
+              onChange={handleDaysChange}
               className="w-full px-4 py-3 bg-[#f5f5f7] border-none rounded-[12px] text-[#1d1d1f] focus:outline-none focus:ring-2 focus:ring-[#007aff]"
             />
           </div>
