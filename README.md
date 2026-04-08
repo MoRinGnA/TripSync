@@ -3,6 +3,7 @@
 다중 사용자가 AI를 통해 빠르고 편리하게 여행을 계획할 수 있는 웹 플래너
 
 서비스 테스트 링크: https://project-4gwlyokn9-mo-rin-a.vercel.app/
+
 ctrl + 좌클릭 시에, 새 탭으로 이동합니다.
 
 **로드맵**
