@@ -12,10 +12,14 @@ export default function AiPlannerView({ onGenerateSchedule }) {
 
     setIsLoading(true);
 
+    const API_URL = import.meta.env.DEV
+      ? "http://localhost:3000/api/gemini"
+      : "/api/gemini";
+
     const prompt = `너는 전문 여행 플래너야. ${destination} 여행 일정을 ${days}일치 짜줘. 여행 테마는 ${theme}이야. 반드시 아래의 JSON 배열 형식으로만 응답해. 부가적인 설명이나 마크다운 기호는 절대 넣지 마.\n[\n  {"day": 1, "time": "10:00", "title": "방문 장소 이름", "location": "장소 주소"}\n]`;
 
     try {
-      const response = await fetch("/api/gemini", {
+      const response = await fetch(API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
