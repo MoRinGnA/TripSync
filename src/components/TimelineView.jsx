@@ -15,6 +15,7 @@ export default function TimelineView({
   editForm,
   setEditForm,
   handleEditStart,
+  handleItemClick,
   handleEditSave,
   handleEditCancel,
   handleDelete,
@@ -43,6 +44,7 @@ export default function TimelineView({
         editForm={editForm}
         setEditForm={setEditForm}
         onEditStart={handleEditStart}
+        onItemClick={handleItemClick}
         onEditSave={handleEditSave}
         onEditCancel={handleEditCancel}
         onDelete={handleDelete}

@@ -117,6 +117,15 @@ function App() {
   };
 
   const handleEditStart = (item) => {
+    setEditingId(item.id);
+    setEditForm({
+      time: item.time,
+      title: item.title,
+      location: item.location,
+    });
+  };
+
+  const handleItemClick = (item) => {
     setMapSearchState({
       query: item.title,
       timestamp: Date.now(),
@@ -212,6 +221,7 @@ function App() {
         editForm={editForm}
         setEditForm={setEditForm}
         handleEditStart={handleEditStart}
+        handleItemClick={handleItemClick}
         handleEditSave={handleEditSave}
         handleEditCancel={handleEditCancel}
         handleDelete={handleDelete}
