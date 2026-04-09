@@ -232,7 +232,7 @@ function App() {
 
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-      <div className="flex h-screen w-full bg-[#fbfbfd] overflow-hidden">
+      <div className="fixed inset-0 w-screen h-screen bg-[#fbfbfd] flex overflow-hidden">
         <Navigation
           activeView={activeView}
           setActiveView={setActiveView}
@@ -240,14 +240,14 @@ function App() {
           setIsSplitView={setIsSplitView}
         />
 
-        <div className="flex-1 ml-20 transition-all duration-300 h-full">
+        <div className="flex-1 ml-20 transition-all duration-300 h-full overflow-hidden relative">
           {isSplitView ? (
-            <div className="flex w-full h-full divide-x divide-[#e5e5ea]">
-              <div className="w-1/2 h-full bg-[#fbfbfd]">
+            <div className="flex w-full h-full divide-x divide-[#e5e5ea] overflow-hidden">
+              <div className="w-1/2 h-full overflow-y-auto overflow-x-hidden scrollbar-hide">
                 {renderTimeline()}
               </div>
 
-              <div className="w-1/2 h-full bg-white overflow-auto">
+              <div className="w-1/2 h-full bg-white overflow-y-auto overflow-x-hidden">
                 {activeView === "ai" || activeView === "timeline" ? (
                   <AiPlannerView onGenerateSchedule={handleGenerateFromAI} />
                 ) : (
@@ -261,7 +261,7 @@ function App() {
               </div>
             </div>
           ) : (
-            <div className="w-full h-full overflow-auto">
+            <div className="w-full h-full overflow-y-auto overflow-x-hidden scrollbar-hide">
               {activeView === "timeline" ? (
                 renderTimeline()
               ) : activeView === "ai" ? (

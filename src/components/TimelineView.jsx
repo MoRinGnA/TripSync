@@ -21,7 +21,7 @@ export default function TimelineView({
   handleDelete,
 }) {
   return (
-    <div className="max-w-3xl mx-auto py-10 px-4 h-full overflow-y-auto scrollbar-hide">
+    <div className="max-w-3xl mx-auto py-10 px-4 h-full overflow-y-auto overflow-x-hidden scrollbar-hide">
       <h1 className="header-title">Project P</h1>
 
       <DayTabs
